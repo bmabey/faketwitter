@@ -1,4 +1,4 @@
-# faketwitter
+h1. faketwitter
 
 Factory goodness for twitter search responses wrapped in FakeWeb awesomeness.
 
