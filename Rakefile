@@ -5,8 +5,8 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "faketwitter"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{Easily stub out Twitter searches}
+    gem.description = %Q{FakeWeb wrapper for Twitter and factories to build tweets and search responses}
     gem.email = "ben@benmabey.com"
     gem.homepage = "http://github.com/bmabey/faketwitter"
     gem.authors = ["Ben Mabey"]
