@@ -77,6 +77,16 @@ describe FakeTwitter do
       response['max_id'].should == 100
     end
 
+    it "creates the tweets based on the defined created_at times if possible" do
+      response = FakeTwitter.search_response(:results => [
+        {'created_at' => Time.now - 100, :text => 'first tweet'},
+        {'created_at' => Time.now, :text => 'most recent tweet'}
+      ])
+      response['results'].first['text'].should == 'most recent tweet'
+      response['results'].first['id'].should > response['results'].last['id']
+    end
+
+
   end
 
 

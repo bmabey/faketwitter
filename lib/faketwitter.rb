@@ -43,7 +43,24 @@ module FakeTwitter
       def create(attributes)
         # TODO: remove duplication between factories.
         response =   DEFAULTS.merge(attributes.stringify_keys)
-        response['results'] = response['results'].map do |tweet_hash| 
+        response['results'] = create_tweets(response['results'].dup)
+
+        unless response['results'].empty?
+          response['max_id'] = response['results'].map { |t| t['id'] }.max
+        end
+
+        response
+      end
+
+
+      private
+      def create_tweets(tweets)
+        now = Time.now
+        tweets.sort! do |tweet_a, tweet_b|
+          (tweet_b['created_at'] || now) <=> (tweet_a['created_at'] || now)
+        end
+        # We do the reverses so that the id's are auto-incremented correctly
+        tweets.reverse!.map! do |tweet_hash|
           tweet = FakeTwitter.new_tweet(tweet_hash)
           # hardcoding +0000 because %z was giving -0700 for UTC for some reason (leopard MRI)..
           tweet['created_at'] = tweet['created_at'].utc.strftime("%a, %d %b %Y %H:%M:%S +0000")
@@ -51,11 +68,7 @@ module FakeTwitter
           tweet
         end
 
-        unless response['results'].empty?
-          response['max_id'] = response['results'].map { |t| t['id'] }.max
-        end
-
-        response
+        tweets.reverse!
       end
 
     end
