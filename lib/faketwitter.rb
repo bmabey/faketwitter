@@ -24,6 +24,10 @@ module FakeTwitter
       SearchResponseFactory.create(options)
     end
 
+    def tweets_from(user)
+      TweetFactory.tweets_from(user)
+    end
+
   end
 
 
@@ -89,6 +93,7 @@ module FakeTwitter
       def reset
         @counter = nil
         @users = nil
+        @tweet_repo = nil
       end
 
       def create(attributes)
@@ -100,8 +105,15 @@ module FakeTwitter
         tweet['profile_image_url']  ||= "http://s3.amazonaws.com/twitter_production/profile_images/#{tweet['from_user_id']}/photo.jpg"
         tweet['created_at']         ||= Time.now
 
+        tweet_repo << tweet
         tweet
       end
+
+      def tweets_from(user)
+        tweet_repo.select { |tweet| tweet['from_user'] == user }
+      end
+
+      private
 
       def counter(counter_type)
         @counter ||= Hash.new(0)
@@ -114,13 +126,15 @@ module FakeTwitter
         @users[user] ||= counter(:user_id)
       end
 
-      private
-
       def clean_user_names(tweet)
         ['from_user', 'to_user'].each do |key|
           next unless tweet[key]
           tweet[key].sub!('@','')
         end
+      end
+
+      def tweet_repo
+        @tweet_repo ||= []
       end
 
     end

@@ -139,7 +139,19 @@ describe FakeTwitter do
       tweet['from_user'].should == 'james'
       tweet['to_user'].should == 'john'
     end
+  end
 
+  describe '::tweets_from' do
+    it "returns all the tweets that have been created from the specified user" do
+      FakeTwitter.search_response(:results => [
+        {'from_user' => 'ben', 'text' => 'hello'},
+        {'from_user' => 'ben', 'text' => 'goodbye'},
+        {'from_user' => 'someone_else', 'text' => 'just sending a tweet'}
+      ])
+
+      tweets = FakeTwitter.tweets_from('ben')
+      tweets.map { |t| t['text'] }.should == ['goodbye', 'hello']
+    end
 
   end
 
