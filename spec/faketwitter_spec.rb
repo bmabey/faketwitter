@@ -85,14 +85,11 @@ describe FakeTwitter do
       response['results'].first['text'].should == 'most recent tweet'
       response['results'].first['id'].should > response['results'].last['id']
     end
-
-
   end
 
 
 
   describe '::new_tweet' do
-
     it "returns hash of an API compliant tweet with sane defaults" do
       tweet = FakeTwitter.new_tweet({})
       tweet.slice(*%w[text from_user to_user_id iso_language_code source]).should == {
