@@ -3,7 +3,7 @@ require 'activesupport'
 
 describe FakeTwitter do
   before(:each) do
-    FakeTwitter::TweetFactory.reset
+    FakeTwitter.reset
   end
 
   describe '::register_search' do
