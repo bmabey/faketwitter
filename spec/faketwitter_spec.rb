@@ -58,6 +58,25 @@ describe FakeTwitter do
 
   end
 
+  describe '::register_searches' do
+    it "registers the multiple search results with FakeWeb to be rotated" do
+      # expect
+      FakeWeb.should_receive(:register_uri).with do |_, _, fakeweb_return_options|
+        fakeweb_return_options.size.should == 2
+        first_result_set = JSON.parse(fakeweb_return_options.first[:body])
+        second_result_set = JSON.parse(fakeweb_return_options.last[:body])
+        first_result_set['results'].should be_empty
+        second_result_set['results'].first['text'] == 'foo bar'
+      end
+
+      # when
+      FakeTwitter.register_searches('foo', [
+        {:results => []},
+        {:results => [{:text => 'foo bar'}]}
+      ])
+    end
+  end
+
 
   describe '::search_response' do
     it "has sane defaults for the other response values" do

@@ -7,12 +7,26 @@ module FakeTwitter
   class << self
 
     def register_search(query, search_options = {})
+      return register_searches(query, search_options) if search_options.is_a?(Array)
       escaped_query = CGI.escape(query)
       search_options['query'] = escaped_query
       FakeWeb.register_uri(
         :get,
-        "http://search.twitter.com/search.json?q=#{escaped_query}",
-        :body => search_response(search_options).to_json
+        search_url(escaped_query),
+        fake_web_options(search_options)
+      )
+    end
+
+    def register_searches(query, rotated_search_options)
+      escaped_query = CGI.escape(query)
+      search_results = rotated_search_options.map do |search_options|
+        search_options['query'] = escaped_query
+        fake_web_options(search_options)
+      end
+      FakeWeb.register_uri(
+        :get,
+        search_url(escaped_query),
+        search_results
       )
     end
 
@@ -31,6 +45,16 @@ module FakeTwitter
 
     def tweets_from(user)
       TweetFactory.tweets_from(user)
+    end
+
+    private
+
+    def search_url(escaped_query)
+      "http://search.twitter.com/search.json?q=#{escaped_query}"
+    end
+
+    def fake_web_options(search_options)
+      {:body => search_response(search_options).to_json}
     end
 
   end
