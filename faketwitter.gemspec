@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{faketwitter}
-  s.version = "0.1.1"
+  s.version = "0.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ben Mabey"]
-  s.date = %q{2009-08-23}
+  s.date = %q{2009-08-24}
   s.description = %q{FakeWeb wrapper for Twitter and factories to build tweets and search responses}
   s.email = %q{ben@benmabey.com}
   s.extra_rdoc_files = [
