@@ -93,8 +93,10 @@ module FakeTwitter
 
       def create(attributes)
         tweet                       =   DEFAULTS.merge(attributes.stringify_keys)
+        clean_user_names(tweet)
         tweet['id']                 ||= counter(:id)
         tweet['from_user_id']       ||= user_id_for(tweet['from_user'])
+        tweet['to_user_id']         ||= user_id_for(tweet['to_user'])
         tweet['profile_image_url']  ||= "http://s3.amazonaws.com/twitter_production/profile_images/#{tweet['from_user_id']}/photo.jpg"
         tweet['created_at']         ||= Time.now
 
@@ -107,8 +109,18 @@ module FakeTwitter
       end
 
       def user_id_for(user)
+        return unless user
         @users ||= {}
         @users[user] ||= counter(:user_id)
+      end
+
+      private
+
+      def clean_user_names(tweet)
+        ['from_user', 'to_user'].each do |key|
+          next unless tweet[key]
+          tweet[key].sub!('@','')
+        end
       end
 
     end

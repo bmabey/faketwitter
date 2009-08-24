@@ -114,6 +114,11 @@ describe FakeTwitter do
       FakeTwitter.new_tweet({'from_user' => 'krusty'})['from_user_id'].should == 2
     end
 
+    it "assigns a user_id for to_user when needed" do
+      FakeTwitter.new_tweet({'to_user' => 'billy'})['to_user_id'].should_not be_nil
+    end
+
+
     it "resuses the same user id for tweets made for the same user" do
       FakeTwitter.new_tweet({'from_user' => 'jojo'})['from_user_id'].should == 1
       FakeTwitter.new_tweet({'from_user' => 'jojo'})['from_user_id'].should == 1
@@ -128,6 +133,13 @@ describe FakeTwitter do
       FakeTwitter.new_tweet('from_user_id' => 123)['profile_image_url'].
         should == "http://s3.amazonaws.com/twitter_production/profile_images/123/photo.jpg"
     end
+
+    it "strips leading @s from user names" do
+      tweet = FakeTwitter.new_tweet('from_user' => '@james', 'to_user' => '@john')
+      tweet['from_user'].should == 'james'
+      tweet['to_user'].should == 'john'
+    end
+
 
   end
 
