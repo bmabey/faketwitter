@@ -16,6 +16,11 @@ module FakeTwitter
       )
     end
 
+    def reset
+      FakeWeb.clean_registry
+      TweetFactory.reset
+    end
+
     def new_tweet(attributes)
       TweetFactory.create(attributes)
     end

@@ -152,7 +152,28 @@ describe FakeTwitter do
       tweets = FakeTwitter.tweets_from('ben')
       tweets.map { |t| t['text'] }.should == ['goodbye', 'hello']
     end
+  end
 
+  describe '::reset' do
+    it "tells FakeWeb to clean it's registry" do
+      FakeWeb.should_receive(:clean_registry)
+      FakeTwitter.reset
+    end
+    it "resets the user id counter for tweets" do
+      FakeTwitter.new_tweet('from_user' => 'foo')['from_user_id'].should == 1
+      FakeTwitter.reset
+      FakeTwitter.new_tweet('from_user' => 'bar')['from_user_id'].should == 1
+    end
+    it "resets the tweet id counter" do
+      FakeTwitter.new_tweet('from_user' => 'foo')['id'].should == 1
+      FakeTwitter.reset
+      FakeTwitter.new_tweet('from_user' => 'foo')['id'].should == 1
+    end
+    it "clears the sent tweets" do
+      FakeTwitter.new_tweet('from_user' => 'foo')
+      FakeTwitter.reset
+      FakeTwitter.tweets_from('foo').should be_empty
+    end
   end
 
 end
