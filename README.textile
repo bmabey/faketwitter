@@ -15,4 +15,7 @@ irb(main):005:0>
 
 </pre>
 
-For more information look at the specs.
+For an example on how to use this in Cucumber see this "scenario":http://github.com/bmabey/codenote/blob/master/features/twitter_quiz.feature#L31-34 and the corresponding "step definitions":http://github.com/bmabey/codenote/blob/master/features/step_definitions/twitter_search_steps.rb#L1-12.
+
+Documentation is lacking at this point, but there really isn't much to this gem.  Take a look at the "code":http://github.com/bmabey/faketwitter/blob/master/lib/faketwitter.rb and the corresponding "RSpec examples":http://github.com/bmabey/faketwitter/blob/master/spec/faketwitter_spec.rb.
+
